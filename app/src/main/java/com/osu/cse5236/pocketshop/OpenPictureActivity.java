@@ -2,18 +2,51 @@ package com.osu.cse5236.pocketshop;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class OpenPictureActivity extends Activity {
 
+    private final String TAG = ((Object)this).getClass().getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_picture);
+        Log.e(TAG, "++ In onCreate() ++");
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "++ In onStart() ++");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG, "++ In onResume() ++");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(TAG, "++ In onPause() ++");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e(TAG, "++ In onStop() ++");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "++ In onDestroy() ++");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

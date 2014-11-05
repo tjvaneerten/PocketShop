@@ -9,10 +9,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 
-public class OpenPictureActivity extends Activity {
+public class OpenPictureActivity extends Activity implements View.OnClickListener {
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
@@ -23,8 +25,21 @@ public class OpenPictureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_picture);
-        initializeGetPictureFromGallery();
+        ImageView camera = (ImageView)findViewById(R.id.camera);
+        ImageView collage = (ImageView)findViewById(R.id.collage);
+        ImageView crop = (ImageView)findViewById(R.id.crop);
+        ImageView rotate = (ImageView)findViewById(R.id.rotate);
+        ImageView save = (ImageView)findViewById(R.id.save);
+        ImageView share = (ImageView)findViewById(R.id.share);
+        FrameLayout pictureFrame = (FrameLayout)findViewById(R.id.pictureFrame);
 
+        camera.setOnClickListener(this);
+        collage.setOnClickListener(this);
+        crop.setOnClickListener(this);
+        rotate.setOnClickListener(this);
+        save.setOnClickListener(this);
+        share.setOnClickListener(this);
+        pictureFrame.setOnClickListener(this);
         Log.e(TAG, "++ In onCreate() ++");
     }
 
@@ -77,19 +92,22 @@ public class OpenPictureActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initializeGetPictureFromGallery() {
-        Button fromGallery = (Button) findViewById(R.id.center);
-        fromGallery.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View arg0) {
-
-                // in onCreate or any event where your want the user to
-                // select a file
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
-            }
-        });
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.camera:
+                break;
+            case R.id.collage:
+                break;
+            case R.id.crop:
+                break;
+            case R.id.rotate:
+                break;
+            case R.id.save:
+                break;
+            case R.id.share:
+                break;
+            case R.id.pictureFrame:
+                break;
+        }
     }
 }

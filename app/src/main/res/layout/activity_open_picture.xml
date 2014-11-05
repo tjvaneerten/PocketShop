@@ -7,21 +7,82 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".OpenPictureActivity"
-    android:background="#ffb8bec2">
-    <LinearLayout
+    android:background="#ffb8bec2"
+    android:id="@+id/container"
+    android:focusableInTouchMode="false">
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal"></LinearLayout>
+        android:id="@+id/save"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@android:drawable/ic_menu_save" />
 
-    <Button
-        android:contentDescription="OpenGallery"
-        android:id="@+id/center"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:gravity="center"
-        android:text="Select Picture to Edit"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/camera"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@android:drawable/ic_menu_camera" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/crop"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@android:drawable/ic_menu_crop" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rotate"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:drawable/ic_menu_rotate" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/collage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@android:drawable/ic_dialog_dialer" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/share"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:drawable/ic_menu_share" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/pictureFrame"
+        android:background="#ffa6acb0"
+        android:layout_toStartOf="@+id/collage"
+        android:layout_below="@+id/crop"
+        android:layout_alignRight="@+id/collage"
+        android:layout_alignEnd="@+id/collage"
+        android:layout_above="@+id/save"
+        android:layout_alignLeft="@+id/crop"
+        android:layout_alignStart="@+id/crop">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Tap to Open Picture"
+            android:id="@+id/opener"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
 </RelativeLayout>

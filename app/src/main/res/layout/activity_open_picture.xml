@@ -27,7 +27,16 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@android:drawable/ic_menu_gallery" />
+        android:background="@android:drawable/ic_menu_camera" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gallery"
+        android:layout_toEndOf="@+id/rotate"
+        android:background="@android:drawable/ic_menu_gallery"
+        android:layout_below="@+id/pictureFrame"
+        android:layout_toRightOf="@+id/rotate" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -59,9 +68,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/share"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@android:drawable/ic_menu_share" />
+        android:background="@android:drawable/ic_menu_share"
+        android:layout_below="@+id/pictureFrame"
+        android:layout_toLeftOf="@+id/rotate"
+        android:layout_toStartOf="@+id/rotate"
+        android:layout_marginRight="30dp" />
 
     <FrameLayout
         android:layout_width="fill_parent"

@@ -27,7 +27,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@android:drawable/ic_menu_camera" />
+        android:background="@android:drawable/ic_menu_gallery" />
 
     <ImageView
         android:layout_width="wrap_content"

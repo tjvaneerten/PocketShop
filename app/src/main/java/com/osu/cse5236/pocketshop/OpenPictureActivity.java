@@ -1,6 +1,7 @@
 package com.osu.cse5236.pocketshop;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.osu.cse5236.framework.EditablePhoto;
 
@@ -107,6 +109,16 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.camera:
+                try {
+                    //use standard intent to capture an image
+                    Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    //we will handle the returned data in onActivityResult
+                    startActivityForResult(captureIntent, TAKE_PICTURE);
+                } catch(ActivityNotFoundException ex){
+                    //display an error message
+                    String errorMessage = "Error: This device does not support capturing images";
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.collage:
                 break;

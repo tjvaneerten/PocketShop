@@ -18,6 +18,7 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
+    public static final int CROP_PICTURE = 2;
     private String selectedImagePath;
 
 

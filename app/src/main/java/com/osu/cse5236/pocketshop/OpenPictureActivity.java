@@ -16,12 +16,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.osu.cse5236.framework.EditablePhoto;
+
 
 public class OpenPictureActivity extends Activity implements View.OnClickListener {
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
-    public static final int CROP_PICTURE = 2;
+    private static final int TAKE_PICTURE = 2;
+    public static final int CROP_PICTURE = 3;
     private String selectedImagePath;
 
 
@@ -115,6 +118,22 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
                 break;
             case R.id.pictureFrame:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE) {
+                // user has taken a new picture
+                EditablePhoto editablePhoto = new EditablePhoto(data.getData(), this);
+            } else if (requestCode == SELECT_PICTURE) {
+                // user has selected an existing picture
+                EditablePhoto editablePhoto = new EditablePhoto(data.getData(), this);
+            } else if (requestCode == CROP_PICTURE) {
+                // user has cropped the editable picture
+
+            }
         }
     }
 }

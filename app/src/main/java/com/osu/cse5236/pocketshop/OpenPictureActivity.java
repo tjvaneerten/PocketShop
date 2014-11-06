@@ -38,6 +38,7 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
         ImageView rotate = (ImageView)findViewById(R.id.rotate);
         ImageView save = (ImageView)findViewById(R.id.save);
         ImageView share = (ImageView)findViewById(R.id.share);
+        ImageView gallery = (ImageView)findViewById(R.id.gallery);
         FrameLayout pictureFrame = (FrameLayout)findViewById(R.id.pictureFrame);
 
         camera.setOnClickListener(this);
@@ -46,6 +47,7 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
         rotate.setOnClickListener(this);
         save.setOnClickListener(this);
         share.setOnClickListener(this);
+        gallery.setOnClickListener(this);
         pictureFrame.setOnClickListener(this);
         Log.e(TAG, "++ In onCreate() ++");
     }
@@ -117,6 +119,8 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
             case R.id.share:
                 break;
             case R.id.pictureFrame:
+                break;
+            case R.id.gallery:
                 break;
         }
     }

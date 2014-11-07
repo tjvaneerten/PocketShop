@@ -35,8 +35,9 @@
         android:id="@+id/gallery"
         android:layout_toEndOf="@+id/rotate"
         android:background="@android:drawable/ic_menu_gallery"
-        android:layout_below="@+id/pictureFrame"
-        android:layout_toRightOf="@+id/rotate" />
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/rotate"
+        android:layout_marginLeft="34dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -69,31 +70,22 @@
         android:layout_height="wrap_content"
         android:id="@+id/share"
         android:background="@android:drawable/ic_menu_share"
-        android:layout_below="@+id/pictureFrame"
-        android:layout_toLeftOf="@+id/rotate"
         android:layout_toStartOf="@+id/rotate"
-        android:layout_marginRight="30dp" />
+        android:layout_marginRight="34dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/rotate" />
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/pictureFrame"
-        android:background="#ffa6acb0"
-        android:layout_toStartOf="@+id/collage"
-        android:layout_below="@+id/crop"
-        android:layout_alignRight="@+id/collage"
-        android:layout_alignEnd="@+id/collage"
-        android:layout_above="@+id/save"
-        android:layout_alignLeft="@+id/crop"
-        android:layout_alignStart="@+id/crop">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Tap to Open Picture"
-            android:id="@+id/opener"
-            android:layout_gravity="center" />
-    </FrameLayout>
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.osu.cse5236.framework.pictureFrame"
+        android:id="@+id/fragment"
+        tools:layout="@layout/fragment_picture_frame"
+        android:layout_below="@+id/rotate"
+        android:layout_above="@+id/camera"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

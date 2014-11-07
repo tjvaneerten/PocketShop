@@ -41,7 +41,6 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
         ImageView save = (ImageView)findViewById(R.id.save);
         ImageView share = (ImageView)findViewById(R.id.share);
         ImageView gallery = (ImageView)findViewById(R.id.gallery);
-        FrameLayout pictureFrame = (FrameLayout)findViewById(R.id.pictureFrame);
 
         camera.setOnClickListener(this);
         collage.setOnClickListener(this);
@@ -50,7 +49,6 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
         save.setOnClickListener(this);
         share.setOnClickListener(this);
         gallery.setOnClickListener(this);
-        pictureFrame.setOnClickListener(this);
         Log.e(TAG, "++ In onCreate() ++");
     }
 
@@ -129,8 +127,6 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
             case R.id.save:
                 break;
             case R.id.share:
-                break;
-            case R.id.pictureFrame:
                 break;
             case R.id.gallery:
                 break;

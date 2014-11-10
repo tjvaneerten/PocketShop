@@ -1,34 +1,26 @@
 package com.osu.cse5236.pocketshop;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+import android.support.v4.app.FragmentActivity;
 import com.osu.cse5236.framework.EditablePhoto;
 
-
-public class OpenPictureActivity extends Activity implements View.OnClickListener {
+public class OpenPictureActivity extends FragmentActivity implements View.OnClickListener, pictureFrame.OnFragmentInteractionListener {
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
     private static final int TAKE_PICTURE = 2;
     public static final int CROP_PICTURE = 3;
     private String selectedImagePath;
-
+    private EditablePhoto editablePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +93,6 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
         return super.onOptionsItemSelected(item);
     }
 
-    protected void takePicture() {
-    }
-
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.camera:
@@ -121,6 +110,9 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
             case R.id.collage:
                 break;
             case R.id.crop:
+                if (editablePhoto != null) {
+                    editablePhoto.startCropIntent();
+                }
                 break;
             case R.id.rotate:
                 break;
@@ -140,12 +132,20 @@ public class OpenPictureActivity extends Activity implements View.OnClickListene
                 // user has taken a new picture
                 EditablePhoto editablePhoto = new EditablePhoto(data.getData(), this);
             } else if (requestCode == SELECT_PICTURE) {
-                // user has selected an existing picture
-                EditablePhoto editablePhoto = new EditablePhoto(data.getData(), this);
+                editablePhoto = new EditablePhoto(data.getData(), this);
             } else if (requestCode == CROP_PICTURE) {
                 // user has cropped the editable picture
 
             }
         }
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), SELECT_PICTURE);
     }
 }

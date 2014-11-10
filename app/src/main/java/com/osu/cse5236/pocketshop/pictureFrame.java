@@ -1,16 +1,12 @@
-package com.osu.cse5236.framework;
+package com.osu.cse5236.pocketshop;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.osu.cse5236.pocketshop.R;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +17,7 @@ import com.osu.cse5236.pocketshop.R;
  * create an instance of this fragment.
  *
  */
-public class pictureFrame extends Fragment implements View.OnClickListener{
+public class pictureFrame extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -69,16 +65,16 @@ public class pictureFrame extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_picture_frame, container, false);
-        TextView openPicture = (TextView)v.findViewById(R.id.openPicture);
+        Button openPicture = (Button)v.findViewById(R.id.openPicture);
 
         openPicture.setOnClickListener(this);
-        return inflater.inflate(R.layout.fragment_picture_frame, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction();
         }
     }
 
@@ -108,6 +104,7 @@ public class pictureFrame extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.openPicture:
+                onButtonPressed();
                 break;
         }
     }
@@ -124,7 +121,7 @@ public class pictureFrame extends Fragment implements View.OnClickListener{
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction();
     }
 
 }

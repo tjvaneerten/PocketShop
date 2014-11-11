@@ -18,10 +18,11 @@ import android.support.v4.app.FragmentActivity;
 import com.osu.cse5236.framework.EditablePhoto;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 public class OpenPictureActivity extends FragmentActivity
         implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener,
-        PictureFrame.OnEditablePictureInteractionListener{
+        PictureFrame.OnEditablePictureInteractionListener, Serializable{
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
@@ -163,7 +164,7 @@ public class OpenPictureActivity extends FragmentActivity
                 // user has taken a new picture
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * 0.5), (int)(bitmap.getHeight() * 0.5), false);
                     editablePhoto = new EditablePhoto(data.getData(), scaledBitmap, this);
                 } catch (IOException e) {
                     e.printStackTrace();

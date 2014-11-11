@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.osu.cse5236.pocketshop.OpenPictureActivity;
 
@@ -36,6 +37,7 @@ public class EditablePhoto implements Serializable {
     }
 
     public void startCropIntent() {
+        Log.e("asdf", "asdf");
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(originalImageUri, "image/*");
         cropIntent.putExtra("crop", "true");

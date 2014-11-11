@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -17,7 +18,8 @@ import android.support.v4.app.FragmentActivity;
 import com.osu.cse5236.framework.EditablePhoto;
 
 public class OpenPictureActivity extends FragmentActivity
-        implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener {
+        implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener,
+        PictureFrame.OnEditablePictureInteractionListener{
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
@@ -168,5 +170,10 @@ public class OpenPictureActivity extends FragmentActivity
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,
                 "Select Picture"), SELECT_PICTURE);
+    }
+
+    @Override
+    public void onEditablePictureInteraction(Uri uri) {
+        // TODO
     }
 }

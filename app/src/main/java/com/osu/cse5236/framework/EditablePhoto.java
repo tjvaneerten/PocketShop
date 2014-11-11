@@ -37,7 +37,6 @@ public class EditablePhoto implements Serializable {
     }
 
     public void startCropIntent() {
-        Log.e("asdf", "asdf");
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(originalImageUri, "image/*");
         cropIntent.putExtra("crop", "true");

@@ -23,6 +23,7 @@ public class OpenPictureActivity extends FragmentActivity
     private static final int SELECT_PICTURE = 1;
     private static final int TAKE_PICTURE = 2;
     public static final int CROP_PICTURE = 3;
+    private static final String SAVED_STATE = "saved state";
     private String selectedImagePath;
     private EditablePhoto editablePhoto;
 
@@ -135,6 +136,13 @@ public class OpenPictureActivity extends FragmentActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        Log.e("asd", "in onsaveinstancestat");
+        super.onSaveInstanceState(bundle);
+        //bundle.putSerializable(SAVED_STATE, );
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_PICTURE) {
@@ -149,7 +157,7 @@ public class OpenPictureActivity extends FragmentActivity
             }
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto));
+            fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
         }
     }
 

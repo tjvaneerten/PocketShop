@@ -155,7 +155,8 @@ public class OpenPictureActivity extends FragmentActivity
                 // user has taken a new picture
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-                    editablePhoto = new EditablePhoto(data.getData(), bitmap, this);
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
+                    editablePhoto = new EditablePhoto(data.getData(), scaledBitmap, this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

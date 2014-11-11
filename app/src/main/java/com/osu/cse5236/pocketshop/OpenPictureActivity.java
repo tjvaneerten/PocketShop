@@ -17,6 +17,8 @@ import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import com.osu.cse5236.framework.EditablePhoto;
 
+import java.io.IOException;
+
 public class OpenPictureActivity extends FragmentActivity
         implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener,
         PictureFrame.OnEditablePictureInteractionListener{
@@ -151,10 +153,21 @@ public class OpenPictureActivity extends FragmentActivity
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_PICTURE) {
                 // user has taken a new picture
-                editablePhoto = new EditablePhoto(data.getData(), this);
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    editablePhoto = new EditablePhoto(data.getData(), bitmap, this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if (requestCode == SELECT_PICTURE) {
                 // user has selected an existing photo
-                editablePhoto = new EditablePhoto(data.getData(), this);
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
+                    editablePhoto = new EditablePhoto(data.getData(), scaledBitmap, this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if (requestCode == CROP_PICTURE) {
                 // user has cropped the editable picture
                 editablePhoto.extractCroppedBitmap(data.getExtras());

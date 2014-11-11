@@ -1,9 +1,11 @@
 package com.osu.cse5236.pocketshop;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +69,7 @@ public class PictureFrame extends Fragment {
         if (editablePhoto.getCroppedImage() != null) {
             frame.setImageBitmap(editablePhoto.getCroppedImage());
         } else {
-            frame.setImageURI(editablePhoto.getOriginalImage());
+            frame.setImageBitmap(editablePhoto.getOriginalImage());
         }
         return v;
     }

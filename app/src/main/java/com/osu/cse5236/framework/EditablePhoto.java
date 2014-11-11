@@ -15,17 +15,21 @@ import java.io.Serializable;
  */
 public class EditablePhoto implements Serializable {
     private Activity mainActivity;
-    private Uri originalImage;
+    private Uri originalImageUri;
+    private Bitmap originalImage;
     private Bitmap croppedImage;
 
-    public EditablePhoto(Uri selectedPhoto, Activity activity) {
+    public EditablePhoto(Uri selectedPhotoUri, Bitmap selectedPhoto, Activity activity) {
         mainActivity = activity;
+        originalImageUri = selectedPhotoUri;
         originalImage = selectedPhoto;
     }
 
-    public Uri getOriginalImage() {
+    public Bitmap getOriginalImage() {
         return originalImage;
     }
+
+    public Uri getOriginalImageUri() { return originalImageUri; }
 
     public Bitmap getCroppedImage() {
         return croppedImage;
@@ -33,7 +37,7 @@ public class EditablePhoto implements Serializable {
 
     public void startCropIntent() {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
-        cropIntent.setDataAndType(originalImage, "image/*");
+        cropIntent.setDataAndType(originalImageUri, "image/*");
         cropIntent.putExtra("crop", "true");
         cropIntent.putExtra("aspectX", 1);
         cropIntent.putExtra("aspectY", 1);

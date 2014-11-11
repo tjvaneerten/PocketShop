@@ -49,10 +49,12 @@ public class OpenPictureActivity extends FragmentActivity
         share.setOnClickListener(this);
         gallery.setOnClickListener(this);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        OpenExistingPicture pictureFrame = new OpenExistingPicture();
-        fragmentTransaction.add(R.id.fragmentPlaceholder, pictureFrame).commit();
+        if (savedInstanceState == null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            OpenExistingPicture pictureFrame = new OpenExistingPicture();
+            fragmentTransaction.add(R.id.fragmentPlaceholder, pictureFrame).commit();
+        }
         Log.e(TAG, "++ In onCreate() ++");
     }
 
@@ -159,7 +161,9 @@ public class OpenPictureActivity extends FragmentActivity
             }
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
+            fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto));
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
 

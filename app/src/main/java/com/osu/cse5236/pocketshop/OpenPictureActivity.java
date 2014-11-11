@@ -127,15 +127,7 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.crop:
                 if (editablePhoto != null) {
-                    Intent cropIntent = new Intent("com.android.camera.action.CROP");
-                    cropIntent.setDataAndType(editablePhoto.getOriginalImageUri(), "image/*");
-                    cropIntent.putExtra("crop", "true");
-                    cropIntent.putExtra("aspectX", 1);
-                    cropIntent.putExtra("aspectY", 1);
-                    cropIntent.putExtra("outputX", 256);
-                    cropIntent.putExtra("outputY", 256);
-                    cropIntent.putExtra("return-data", true);
-                    startActivityForResult(cropIntent, CROP_PICTURE);
+                    editablePhoto.startCropIntent();
                 }
                 break;
             case R.id.rotate:

@@ -2,13 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.osu.cse5236.pocketshop.PictureFrame">
+    tools:context="com.osu.cse5236.pocketshop.OpenExistingPicture">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ImageView
+    <Button
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/openedPicture"
+        android:text="Tap to Open Picture"
+        android:id="@+id/openPicture"
         android:layout_gravity="center" />
+
 </FrameLayout>

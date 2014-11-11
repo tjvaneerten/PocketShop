@@ -75,17 +75,12 @@
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/rotate" />
 
-    <fragment
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:name="com.osu.cse5236.pocketshop.pictureFrame"
-        android:id="@+id/fragment"
-        tools:layout="@layout/fragment_picture_frame"
-        android:layout_below="@+id/rotate"
-        android:layout_above="@+id/camera"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/crop"
+        android:layout_above="@+id/save"
+        android:id="@+id/fragmentPlaceholder"></FrameLayout>
 
 </RelativeLayout>

@@ -1,60 +1,62 @@
 package com.osu.cse5236.pocketshop;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import com.osu.cse5236.framework.EditablePhoto;
-
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link PictureFrame.OnFragmentInteractionListener} interface
+ * {@link com.osu.cse5236.pocketshop.OpenExistingPicture.OnOpenExistingPictureListener} interface
  * to handle interaction events.
- * Use the {@link PictureFrame#newInstance} factory method to
+ * Use the {@link OpenExistingPicture#newInstance} factory method to
  * create an instance of this fragment.
  *
  */
-public class PictureFrame extends Fragment {
+public class OpenExistingPicture extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private EditablePhoto editablePhoto;
+    private String mParam1;
+    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private OnOpenExistingPictureListener mListener;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param editablePhoto Parameter 1.
-     * @return A new instance of fragment PictureFrame.
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment pictureFrame.
      */
     // TODO: Rename and change types and number of parameters
-    public static PictureFrame newInstance(EditablePhoto editablePhoto) {
-        PictureFrame fragment = new PictureFrame();
+    public static OpenExistingPicture newInstance(String param1, String param2) {
+        OpenExistingPicture fragment = new OpenExistingPicture();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, editablePhoto);
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-    public PictureFrame() {
+    public OpenExistingPicture() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
-            editablePhoto = (EditablePhoto)getArguments().getSerializable(ARG_PARAM1);
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -62,20 +64,17 @@ public class PictureFrame extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_picture_frame, container, false);
-        ImageView frame = (ImageView)v.findViewById(R.id.openedPicture);
-        if (editablePhoto.getCroppedImage() != null) {
-            frame.setImageBitmap(editablePhoto.getCroppedImage());
-        } else {
-            frame.setImageURI(editablePhoto.getOriginalImage());
-        }
+        View v = inflater.inflate(R.layout.fragment_open_existing_picture, container, false);
+        Button openPicture = (Button)v.findViewById(R.id.openPicture);
+
+        openPicture.setOnClickListener(this);
         return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onOpenExistingPictureSelected();
         }
     }
 
@@ -83,7 +82,7 @@ public class PictureFrame extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnOpenExistingPictureListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -94,6 +93,20 @@ public class PictureFrame extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+    /*
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+    }
+    */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.openPicture:
+                onButtonPressed();
+                break;
+        }
     }
 
     /**
@@ -106,9 +119,9 @@ public class PictureFrame extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnOpenExistingPictureListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onOpenExistingPictureSelected();
     }
 
 }

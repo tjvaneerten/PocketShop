@@ -1,7 +1,10 @@
 package com.osu.cse5236.pocketshop;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -13,7 +16,8 @@ import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import com.osu.cse5236.framework.EditablePhoto;
 
-public class OpenPictureActivity extends FragmentActivity implements View.OnClickListener, pictureFrame.OnFragmentInteractionListener {
+public class OpenPictureActivity extends FragmentActivity
+        implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener {
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
@@ -41,6 +45,11 @@ public class OpenPictureActivity extends FragmentActivity implements View.OnClic
         save.setOnClickListener(this);
         share.setOnClickListener(this);
         gallery.setOnClickListener(this);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        OpenExistingPicture pictureFrame = new OpenExistingPicture();
+        fragmentTransaction.add(R.id.fragmentPlaceholder, pictureFrame).commit();
         Log.e(TAG, "++ In onCreate() ++");
     }
 
@@ -130,18 +139,22 @@ public class OpenPictureActivity extends FragmentActivity implements View.OnClic
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_PICTURE) {
                 // user has taken a new picture
-                EditablePhoto editablePhoto = new EditablePhoto(data.getData(), this);
+                editablePhoto = new EditablePhoto(data.getData(), this);
             } else if (requestCode == SELECT_PICTURE) {
+                // user has selected an existing photo
                 editablePhoto = new EditablePhoto(data.getData(), this);
             } else if (requestCode == CROP_PICTURE) {
                 // user has cropped the editable picture
-
+                editablePhoto.extractCroppedBitmap(data.getExtras());
             }
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto));
         }
     }
 
     @Override
-    public void onFragmentInteraction() {
+    public void onOpenExistingPictureSelected() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);

@@ -164,7 +164,7 @@ public class OpenPictureActivity extends FragmentActivity
                 // user has selected an existing photo
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * 0.5), (int)(bitmap.getHeight() * 0.5), false);
                     editablePhoto = new EditablePhoto(data.getData(), scaledBitmap, this);
                 } catch (IOException e) {
                     e.printStackTrace();

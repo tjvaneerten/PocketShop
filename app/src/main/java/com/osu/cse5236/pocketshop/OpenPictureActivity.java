@@ -145,6 +145,10 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.gallery:
+                if (editablePhoto != null) {
+                    onOpenExistingPictureSelected();
+                }
+
                 break;
         }
     }

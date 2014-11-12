@@ -134,6 +134,9 @@ public class OpenPictureActivity extends FragmentActivity
             case R.id.rotate:
                 break;
             case R.id.save:
+                if (editablePhoto != null) {
+                    editablePhoto.saveImage();
+                }
                 break;
             case R.id.share:
                 break;

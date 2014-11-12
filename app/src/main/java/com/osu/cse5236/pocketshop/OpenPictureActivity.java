@@ -139,6 +139,10 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.share:
+                if (editablePhoto != null) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentPlaceholder, new FacebookLogin()).commit();
+                }
                 break;
             case R.id.gallery:
                 break;

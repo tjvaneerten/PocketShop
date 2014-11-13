@@ -3,6 +3,7 @@ package com.osu.cse5236.framework;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -75,7 +76,11 @@ public class EditablePhoto implements Serializable {
     }
 
     public void rotateImage() {
-
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap rotatedImage = Bitmap.createBitmap(currentImage, 0, 0, currentImage .getWidth(), currentImage .getHeight(), matrix, true);
+        currentImage = rotatedImage;
+        imageHistory.push(currentImage);
     }
 
     public void extractCroppedBitmap(Bundle extras) {

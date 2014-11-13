@@ -81,9 +81,9 @@ public class EditablePhoto implements Serializable {
         }
     }
 
-    public void rotateImage() {
+    public void rotateImage(boolean direction) {
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
+        matrix.postRotate(direction ? 90 : -90);
         Bitmap rotatedImage = Bitmap.createBitmap(currentImage, 0, 0, currentImage .getWidth(), currentImage .getHeight(), matrix, true);
         currentImage = rotatedImage;
         imageHistory.push(currentImage);

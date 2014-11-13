@@ -3,8 +3,13 @@ package com.osu.cse5236.pocketshop;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,18 +24,21 @@ import com.osu.cse5236.framework.EditablePhoto;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.Timestamp;
 
 public class OpenPictureActivity extends FragmentActivity
         implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener,
-        PictureFrame.OnEditablePictureInteractionListener, Serializable, FacebookLogin.OnFragmentInteractionListener{
+        PictureFrame.OnEditablePictureInteractionListener, Serializable, FacebookLogin.OnFragmentInteractionListener,
+        SensorEventListener{
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
     private static final int TAKE_PICTURE = 2;
     public static final int CROP_PICTURE = 3;
-    private static final String SAVED_STATE = "saved state";
-    private String selectedImagePath;
     private EditablePhoto editablePhoto;
+    private SensorManager sensorManager;
+    private Sensor gyroSensor;
+    private long delay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,11 @@ public class OpenPictureActivity extends FragmentActivity
             OpenExistingPicture pictureFrame = new OpenExistingPicture();
             fragmentTransaction.add(R.id.fragmentPlaceholder, pictureFrame).commit();
         }
+
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        delay = 0;
+
         Log.e(TAG, "++ In onCreate() ++");
     }
 
@@ -72,12 +85,14 @@ public class OpenPictureActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+        sensorManager.registerListener(this, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
         Log.e(TAG, "++ In onResume() ++");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        sensorManager.unregisterListener(this);
         Log.e(TAG, "++ In onPause() ++");
     }
 
@@ -135,7 +150,7 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.rotate:
                 if (editablePhoto != null) {
-                    editablePhoto.rotateImage();
+                    editablePhoto.rotateImage(true);
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
@@ -161,6 +176,7 @@ public class OpenPictureActivity extends FragmentActivity
                 onOpenExistingPictureSelected();
                 break;
             case R.id.undo:
+                if (editablePhoto == null) return;
                 if (!editablePhoto.undo()) {
                     Toast.makeText(this, "Nothing to undo!", Toast.LENGTH_SHORT).show();
                 }
@@ -227,6 +243,30 @@ public class OpenPictureActivity extends FragmentActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (editablePhoto == null) return;
+        float rotationZ = sensorEvent.values[2];
+        if (System.nanoTime() > delay) {
+            if (rotationZ <= -3) {
+                editablePhoto.rotateImage(true);
+                delay = System.nanoTime() + 1000000000;
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
+            } else if (rotationZ >= 3) {
+                editablePhoto.rotateImage(false);
+                delay = System.nanoTime() + 1000000000;
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
 }

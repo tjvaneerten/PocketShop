@@ -161,7 +161,9 @@ public class OpenPictureActivity extends FragmentActivity
                 onOpenExistingPictureSelected();
                 break;
             case R.id.undo:
-                editablePhoto.undo();
+                if (!editablePhoto.undo()) {
+                    Toast.makeText(this, "Nothing to undo!", Toast.LENGTH_SHORT).show();
+                }
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();

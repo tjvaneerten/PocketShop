@@ -39,7 +39,7 @@ public class EditablePhoto implements Serializable {
     }
 
     public boolean undo() {
-        if (imageHistory.size() <= 1) {
+        if (imageHistory.size() > 1) {
             imageHistory.pop();
             currentImage = imageHistory.peek();
             return true;

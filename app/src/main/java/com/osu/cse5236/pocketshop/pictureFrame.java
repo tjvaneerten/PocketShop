@@ -1,11 +1,9 @@
 package com.osu.cse5236.pocketshop;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,10 +64,8 @@ public class PictureFrame extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_picture_frame, container, false);
         ImageView frame = (ImageView)v.findViewById(R.id.openedPicture);
-        if (editablePhoto.getCroppedImage() != null) {
-            frame.setImageBitmap(editablePhoto.getCroppedImage());
-        } else {
-            frame.setImageBitmap(editablePhoto.getOriginalImage());
+        if (editablePhoto.getCurrentImage() != null) {
+            frame.setImageBitmap(editablePhoto.getCurrentImage());
         }
         return v;
     }

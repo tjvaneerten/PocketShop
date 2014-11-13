@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 
 import com.osu.cse5236.pocketshop.OpenPictureActivity;
 
@@ -14,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Stack;
 
 /**
  * Created by TJ on 11/6/2014.
@@ -21,24 +21,26 @@ import java.io.Serializable;
 public class EditablePhoto implements Serializable {
     private Activity mainActivity;
     private Uri originalImageUri;
-    private Bitmap originalImage;
-    private Bitmap croppedImage;
+    private Bitmap currentImage;
+    private Stack<Bitmap> imageHistory;
 
     public EditablePhoto(Uri selectedPhotoUri, Bitmap selectedPhoto, Activity activity) {
         mainActivity = activity;
         originalImageUri = selectedPhotoUri;
-        originalImage = selectedPhoto;
+        currentImage = selectedPhoto;
+        imageHistory.push(currentImage);
     }
 
-    public Bitmap getOriginalImage() {
-        return originalImage;
+    public Bitmap getCurrentImage() {
+        return currentImage;
+    }
+
+    public void undo() {
+        imageHistory.pop();
+        currentImage = imageHistory.peek();
     }
 
     public Uri getOriginalImageUri() { return originalImageUri; }
-
-    public Bitmap getCroppedImage() {
-        return croppedImage;
-    }
 
     public void startCropIntent() {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -57,7 +59,7 @@ public class EditablePhoto implements Serializable {
         File savedImage = new File(extStorageDirectory, "asdf.PNG");
         try {
             out = new FileOutputStream(savedImage);
-            originalImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+            currentImage.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -72,6 +74,7 @@ public class EditablePhoto implements Serializable {
     }
 
     public void extractCroppedBitmap(Bundle extras) {
-        croppedImage = extras.getParcelable("data");
+        currentImage = extras.getParcelable("data");
+        imageHistory.push(currentImage);
     }
 }

@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.osu.cse5236.pocketshop.OpenPictureActivity;
 
@@ -37,9 +38,14 @@ public class EditablePhoto implements Serializable {
         return currentImage;
     }
 
-    public void undo() {
-        imageHistory.pop();
-        currentImage = imageHistory.peek();
+    public boolean undo() {
+        if (imageHistory.size() <= 1) {
+            imageHistory.pop();
+            currentImage = imageHistory.peek();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Uri getOriginalImageUri() { return originalImageUri; }

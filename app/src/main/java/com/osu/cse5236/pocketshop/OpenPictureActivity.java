@@ -52,6 +52,7 @@ public class OpenPictureActivity extends FragmentActivity
         ImageView share = (ImageView)findViewById(R.id.share);
         ImageView gallery = (ImageView)findViewById(R.id.gallery);
         ImageView undo = (ImageView)findViewById(R.id.undo);
+        ImageView redo = (ImageView)findViewById(R.id.redo);
 
         camera.setOnClickListener(this);
         collage.setOnClickListener(this);
@@ -61,6 +62,7 @@ public class OpenPictureActivity extends FragmentActivity
         share.setOnClickListener(this);
         gallery.setOnClickListener(this);
         undo.setOnClickListener(this);
+        redo.setOnClickListener(this);
 
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getFragmentManager();

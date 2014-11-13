@@ -83,4 +83,13 @@
         android:layout_above="@+id/save"
         android:id="@+id/fragmentPlaceholder"></FrameLayout>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/undo"
+        android:layout_above="@+id/fragmentPlaceholder"
+        android:layout_toLeftOf="@+id/rotate"
+        android:layout_toStartOf="@+id/rotate"
+        android:background="@android:drawable/ic_menu_revert" />
+
 </RelativeLayout>

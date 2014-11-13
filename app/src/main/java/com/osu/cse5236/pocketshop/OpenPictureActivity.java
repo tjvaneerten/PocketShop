@@ -43,6 +43,7 @@ public class OpenPictureActivity extends FragmentActivity
         ImageView save = (ImageView)findViewById(R.id.save);
         ImageView share = (ImageView)findViewById(R.id.share);
         ImageView gallery = (ImageView)findViewById(R.id.gallery);
+        ImageView undo = (ImageView)findViewById(R.id.undo);
 
         camera.setOnClickListener(this);
         collage.setOnClickListener(this);
@@ -51,6 +52,7 @@ public class OpenPictureActivity extends FragmentActivity
         save.setOnClickListener(this);
         share.setOnClickListener(this);
         gallery.setOnClickListener(this);
+        undo.setOnClickListener(this);
 
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getFragmentManager();
@@ -157,6 +159,12 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.gallery:
                 onOpenExistingPictureSelected();
+                break;
+            case R.id.undo:
+                editablePhoto.undo();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
                 break;
         }
     }

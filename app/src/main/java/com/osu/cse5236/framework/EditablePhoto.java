@@ -53,10 +53,11 @@ public class EditablePhoto implements Serializable {
     public Uri getOriginalImageUri() { return Uri.parse(originalImageUri); }
 
     public void saveImage() throws Exception {
-        String extStorageDirectory = Environment.DIRECTORY_PICTURES;
+        String extStorageDirectory = Environment.DIRECTORY_PICTURES + "PocketShop/";
         Log.e("storageDirectoryName", extStorageDirectory);
         FileOutputStream out = null;
-        File savedImage = new File(extStorageDirectory, "PocketShop/asdf.PNG");
+        File savedImage = new File(extStorageDirectory, "asdf.PNG");
+        savedImage.createNewFile();
         try {
             out = new FileOutputStream(savedImage);
             currentImage.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);

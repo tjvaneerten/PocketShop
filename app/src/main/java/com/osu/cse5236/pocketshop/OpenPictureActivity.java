@@ -145,7 +145,14 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.crop:
                 if (editablePhoto != null) {
-                    editablePhoto.startCropIntent();
+                    Intent cropIntent = new Intent("com.android.camera.action.CROP");
+                    cropIntent.setDataAndType(editablePhoto.getOriginalImageUri(), "image/*");
+                    cropIntent.putExtra("aspectX", 1);
+                    cropIntent.putExtra("aspectY", 1);
+                    cropIntent.putExtra("outputX", 256);
+                    cropIntent.putExtra("outputY", 256);
+                    cropIntent.putExtra("return-data", true);
+                    startActivityForResult(cropIntent, CROP_PICTURE);
                 }
                 break;
             case R.id.rotate:
@@ -179,6 +186,7 @@ public class OpenPictureActivity extends FragmentActivity
                 if (editablePhoto == null) return;
                 if (!editablePhoto.undo()) {
                     Toast.makeText(this, "Nothing to undo!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -202,7 +210,7 @@ public class OpenPictureActivity extends FragmentActivity
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * 0.5), (int)(bitmap.getHeight() * 0.5), false);
-                    editablePhoto = new EditablePhoto(data.getData(), scaledBitmap, this);
+                    editablePhoto = new EditablePhoto(data.getData(), scaledBitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -211,12 +219,13 @@ public class OpenPictureActivity extends FragmentActivity
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() * 0.5), (int)(bitmap.getHeight() * 0.5), false);
-                    editablePhoto = new EditablePhoto(data.getData(), scaledBitmap, this);
+                    editablePhoto = new EditablePhoto(data.getData(), scaledBitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if (requestCode == CROP_PICTURE) {
                 // user has cropped the editable picture
+                if (data == null) Log.e(TAG, "--- cropped data is null ---");
                 editablePhoto.extractCroppedBitmap(data.getExtras());
             }
             FragmentManager fragmentManager = getFragmentManager();

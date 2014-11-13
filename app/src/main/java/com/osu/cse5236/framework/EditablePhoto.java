@@ -14,6 +14,8 @@ import com.osu.cse5236.pocketshop.OpenPictureActivity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Stack;
 
@@ -21,21 +23,20 @@ import java.util.Stack;
  * Created by TJ on 11/6/2014.
  */
 public class EditablePhoto implements Serializable {
-    private Activity mainActivity;
-    private Uri originalImageUri;
-    private Bitmap currentImage;
-    private Stack<Bitmap> imageHistory;
+    public static final long serialVersionUID = 1L;
+    private String originalImageUri;
+    private SerialBitmap currentImage;
+    private Stack<SerialBitmap> imageHistory;
 
-    public EditablePhoto(Uri selectedPhotoUri, Bitmap selectedPhoto, Activity activity) {
-        mainActivity = activity;
-        originalImageUri = selectedPhotoUri;
-        currentImage = selectedPhoto;
-        imageHistory = new Stack<Bitmap>();
+    public EditablePhoto(Uri selectedPhotoUri, Bitmap selectedPhoto) {
+        originalImageUri = selectedPhotoUri.toString();
+        currentImage = new SerialBitmap(selectedPhoto);
+        imageHistory = new Stack<SerialBitmap>();
         imageHistory.push(currentImage);
     }
 
     public Bitmap getCurrentImage() {
-        return currentImage;
+        return currentImage.getImage();
     }
 
     public boolean undo() {
@@ -48,18 +49,7 @@ public class EditablePhoto implements Serializable {
         }
     }
 
-    public Uri getOriginalImageUri() { return originalImageUri; }
-
-    public void startCropIntent() {
-        Intent cropIntent = new Intent("com.android.camera.action.CROP");
-        cropIntent.setDataAndType(originalImageUri, "image/*");
-        cropIntent.putExtra("aspectX", 1);
-        cropIntent.putExtra("aspectY", 1);
-        cropIntent.putExtra("outputX", 256);
-        cropIntent.putExtra("outputY", 256);
-        cropIntent.putExtra("return-data", true);
-        mainActivity.startActivityForResult(cropIntent, ((OpenPictureActivity)mainActivity).CROP_PICTURE);
-    }
+    public Uri getOriginalImageUri() { return Uri.parse(originalImageUri); }
 
     public void saveImage() throws Exception {
         String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
@@ -67,7 +57,7 @@ public class EditablePhoto implements Serializable {
         File savedImage = new File(extStorageDirectory, "asdf.PNG");
         try {
             out = new FileOutputStream(savedImage);
-            currentImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+            currentImage.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
             throw e;
         } finally {
@@ -84,13 +74,13 @@ public class EditablePhoto implements Serializable {
     public void rotateImage(boolean direction) {
         Matrix matrix = new Matrix();
         matrix.postRotate(direction ? 90 : -90);
-        Bitmap rotatedImage = Bitmap.createBitmap(currentImage, 0, 0, currentImage .getWidth(), currentImage .getHeight(), matrix, true);
-        currentImage = rotatedImage;
-        imageHistory.push(currentImage);
+        Bitmap rotatedImage = Bitmap.createBitmap(currentImage.getImage(), 0, 0, currentImage.getImage().getWidth(), currentImage.getImage().getHeight(), matrix, true);
+        imageHistory.push(new SerialBitmap(rotatedImage));
+        currentImage = imageHistory.peek();
     }
 
     public void extractCroppedBitmap(Bundle extras) {
-        currentImage = extras.getParcelable("data");
+        currentImage.setImage((Bitmap) extras.getParcelable("data"));
         imageHistory.push(currentImage);
     }
 }

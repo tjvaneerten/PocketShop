@@ -28,6 +28,7 @@ public class EditablePhoto implements Serializable {
         mainActivity = activity;
         originalImageUri = selectedPhotoUri;
         currentImage = selectedPhoto;
+        imageHistory = new Stack<Bitmap>();
         imageHistory.push(currentImage);
     }
 

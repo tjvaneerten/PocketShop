@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.osu.cse5236.pocketshop.OpenPictureActivity;
@@ -62,11 +63,12 @@ public class EditablePhoto implements Serializable {
     }
 
     public void saveImage() throws Exception {
-        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+        String extStorageDirectory = Environment.DIRECTORY_PICTURES;
+        Log.e("storageDirectoryName", extStorageDirectory);
         FileOutputStream out = null;
-        File savedImage = new File(extStorageDirectory, "asdf.PNG");
+        File savedImage = new File(extStorageDirectory, "PocketShop/");
         try {
-            out = new FileOutputStream(savedImage);
+            out = new FileOutputStream("asdf.PNG");
             currentImage.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
             throw e;

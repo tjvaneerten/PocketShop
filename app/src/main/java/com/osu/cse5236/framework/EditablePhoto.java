@@ -71,6 +71,10 @@ public class EditablePhoto implements Serializable {
         }
     }
 
+    public void rotateImage() {
+
+    }
+
     public void extractCroppedBitmap(Bundle extras) {
         croppedImage = extras.getParcelable("data");
     }

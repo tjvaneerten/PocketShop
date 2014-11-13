@@ -170,6 +170,7 @@ public class OpenPictureActivity extends FragmentActivity
                         Toast.makeText(this, "Image saved successfully!", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         Toast.makeText(this, "Image was not saved successfully", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
                 }
                 break;
@@ -188,8 +189,7 @@ public class OpenPictureActivity extends FragmentActivity
                     Toast.makeText(this, "Nothing to undo!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
                 break;
         }

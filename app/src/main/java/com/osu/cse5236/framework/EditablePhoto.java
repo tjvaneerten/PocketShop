@@ -73,6 +73,10 @@ public class EditablePhoto implements Serializable {
         }
     }
 
+    public void rotateImage() {
+
+    }
+
     public void extractCroppedBitmap(Bundle extras) {
         currentImage = extras.getParcelable("data");
         imageHistory.push(currentImage);

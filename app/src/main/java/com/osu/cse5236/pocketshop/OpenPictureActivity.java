@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 public class OpenPictureActivity extends FragmentActivity
         implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener,
-        PictureFrame.OnEditablePictureInteractionListener, Serializable{
+        PictureFrame.OnEditablePictureInteractionListener, Serializable, FacebookLogin.OnFragmentInteractionListener{
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
@@ -132,6 +132,9 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.rotate:
+                if (editablePhoto != null) {
+                    editablePhoto.rotateImage();
+                }
                 break;
             case R.id.save:
                 if (editablePhoto != null) {
@@ -145,10 +148,7 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.gallery:
-                if (editablePhoto != null) {
-                    onOpenExistingPictureSelected();
-                }
-
+                onOpenExistingPictureSelected();
                 break;
         }
     }
@@ -205,5 +205,10 @@ public class OpenPictureActivity extends FragmentActivity
     @Override
     public void onEditablePictureInteraction(Uri uri) {
         // TODO
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

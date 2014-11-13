@@ -28,11 +28,13 @@ public class EditablePhoto implements Serializable {
     private String originalImageUri;
     private SerialBitmap currentImage;
     private Stack<SerialBitmap> imageHistory;
+    private Stack<SerialBitmap> imageRedos;
 
     public EditablePhoto(Uri selectedPhotoUri, Bitmap selectedPhoto) {
         originalImageUri = selectedPhotoUri.toString();
         currentImage = new SerialBitmap(selectedPhoto);
         imageHistory = new Stack<SerialBitmap>();
+        imageRedos = new Stack<SerialBitmap>();
         imageHistory.push(currentImage);
     }
 
@@ -42,7 +44,17 @@ public class EditablePhoto implements Serializable {
 
     public boolean undo() {
         if (imageHistory.size() > 1) {
-            imageHistory.pop();
+            imageRedos.push(imageHistory.pop());
+            currentImage = imageHistory.peek();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean redo() {
+        if (imageRedos.size() > 0) {
+            imageHistory.push(imageRedos.pop());
             currentImage = imageHistory.peek();
             return true;
         } else {

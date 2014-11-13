@@ -55,7 +55,7 @@ public class EditablePhoto implements Serializable {
         mainActivity.startActivityForResult(cropIntent, ((OpenPictureActivity)mainActivity).CROP_PICTURE);
     }
 
-    public void saveImage() {
+    public void saveImage() throws Exception {
         String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
         FileOutputStream out = null;
         File savedImage = new File(extStorageDirectory, "asdf.PNG");
@@ -63,7 +63,7 @@ public class EditablePhoto implements Serializable {
             out = new FileOutputStream(savedImage);
             currentImage.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             try {
                 if (out != null) {

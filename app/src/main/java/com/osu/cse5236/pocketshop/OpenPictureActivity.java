@@ -141,8 +141,12 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.save:
                 if (editablePhoto != null) {
-                    editablePhoto.saveImage();
-                    Toast.makeText(this, "Image saved successfully!", Toast.LENGTH_SHORT).show();
+                    try {
+                        editablePhoto.saveImage();
+                        Toast.makeText(this, "Image saved successfully!", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Image was not saved successfully", Toast.LENGTH_LONG).show();
+                    }
                 }
                 break;
             case R.id.share:

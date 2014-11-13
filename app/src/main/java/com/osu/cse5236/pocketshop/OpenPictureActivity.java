@@ -134,6 +134,9 @@ public class OpenPictureActivity extends FragmentActivity
             case R.id.rotate:
                 if (editablePhoto != null) {
                     editablePhoto.rotateImage();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
                 }
                 break;
             case R.id.save:

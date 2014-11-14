@@ -21,17 +21,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 
-import com.osu.cse5236.framework.CanvasFrame;
 import com.osu.cse5236.framework.EditablePhoto;
+import com.osu.cse5236.framework.RandomCollage;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.Timestamp;
 
 public class OpenPictureActivity extends FragmentActivity
         implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener,
-        PictureFrame.OnEditablePictureInteractionListener, Serializable, FacebookLogin.OnFragmentInteractionListener,
-        SensorEventListener{
+        PictureFrame.OnEditablePictureInteractionListener, Serializable, SensorEventListener{
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
@@ -41,6 +39,7 @@ public class OpenPictureActivity extends FragmentActivity
     private EditablePhoto editablePhoto;
     private SensorManager sensorManager;
     private Sensor gyroSensor;
+    private RandomCollage randomCollage;
     private long delay;
 
     @Override
@@ -147,6 +146,8 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.collage:
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(randomCollage)).commit();
                 break;
             case R.id.crop:
                 if (editablePhoto != null) {

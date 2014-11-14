@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
+
+import com.osu.cse5236.framework.CanvasFrame;
 import com.osu.cse5236.framework.EditablePhoto;
 
 import java.io.IOException;

@@ -71,6 +71,7 @@ public class EditablePhoto implements Serializable {
         try {
             out = new FileOutputStream(savedImage);
             currentImage.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);
+            originalImageUri = savedImage.toURI().toString();
         } catch (Exception e) {
             throw e;
         } finally {

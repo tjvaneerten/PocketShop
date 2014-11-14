@@ -72,12 +72,6 @@ public class OpenPictureActivity extends FragmentActivity
         redo.setOnClickListener(this);
 
         if (savedInstanceState == null) {
-            Display display = getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int screenWidth = size.x;
-            int screenHeight = size.y;
-            randomCollage = new RandomCollage(editablePhoto, screenWidth, screenHeight);
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             OpenExistingPicture pictureFrame = new OpenExistingPicture();
@@ -158,6 +152,12 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.collage:
                 if (editablePhoto != null) {
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int screenWidth = size.x;
+                    int screenHeight = size.y;
+                    randomCollage = new RandomCollage(editablePhoto, screenWidth, screenHeight);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(editablePhoto, randomCollage)).commit();
                 }

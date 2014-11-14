@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="C:\Users\TJ\AndroidstudioProjects\PocketShop\facebook\src\main\assets" />
+        <source path="C:\Users\Nate\Documents\GitHub\PocketShop\facebook\src\main\assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="C:\Users\TJ\AndroidstudioProjects\PocketShop\facebook\src\debug\assets" />
+        <source path="C:\Users\Nate\Documents\GitHub\PocketShop\facebook\src\debug\assets" />
     </dataSet>
 
 </merger>

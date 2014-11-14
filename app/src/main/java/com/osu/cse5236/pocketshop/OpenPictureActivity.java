@@ -46,6 +46,7 @@ public class OpenPictureActivity extends FragmentActivity
     private Sensor gyroSensor;
     private RandomCollage randomCollage;
     private long delay;
+    private boolean inCollageMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,8 @@ public class OpenPictureActivity extends FragmentActivity
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         delay = 0;
+
+        inCollageMode = false;
 
         Log.e(TAG, "++ In onCreate() ++");
     }
@@ -151,19 +154,29 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.collage:
-                if (editablePhoto != null) {
-                    Display display = getWindowManager().getDefaultDisplay();
-                    Point size = new Point();
-                    display.getSize(size);
-                    int screenWidth = size.x;
-                    int screenHeight = size.y;
-                    randomCollage = new RandomCollage(editablePhoto, screenWidth, screenHeight);
+                if (inCollageMode) {
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(editablePhoto, randomCollage)).commit();
+                    OpenExistingPicture pictureFrame = new OpenExistingPicture();
+                    fragmentTransaction.replace(R.id.fragmentPlaceholder, pictureFrame).commit();
+                    inCollageMode = false;
+                } else {
+                    if (editablePhoto != null) {
+                        inCollageMode = true;
+                        if (randomCollage == null) {
+                            Display display = getWindowManager().getDefaultDisplay();
+                            Point size = new Point();
+                            display.getSize(size);
+                            int screenWidth = size.x;
+                            int screenHeight = size.y;
+                            randomCollage = new RandomCollage(editablePhoto, screenWidth, screenHeight);
+                        }
+                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(editablePhoto, randomCollage)).commit();
+                    }
                 }
                 break;
             case R.id.crop:
-                if (editablePhoto != null) {
+                if ((editablePhoto != null) && !inCollageMode) {
                     Intent cropIntent = new Intent("com.android.camera.action.CROP");
                     cropIntent.setDataAndType(editablePhoto.getOriginalImageUri(), "image/*");
                     cropIntent.putExtra("aspectX", 1);
@@ -175,7 +188,7 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.rotate:
-                if (editablePhoto != null) {
+                if ((editablePhoto != null) && !inCollageMode) {
                     editablePhoto.rotateImage(true);
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -183,36 +196,46 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.save:
-                if (editablePhoto != null) {
-                    try {
-                        editablePhoto.saveImage();
-                        Toast.makeText(this, "Image saved successfully!", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Image was not saved successfully", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
+                if (inCollageMode) {
+                    // save collage
+
+                } else {
+                    if (editablePhoto != null) {
+                        try {
+                            editablePhoto.saveImage();
+                            Toast.makeText(this, "Image saved successfully!", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Image was not saved successfully", Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
                     }
                 }
                 break;
             case R.id.share:
-                if (editablePhoto != null) {
-                    try {
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.setType("image/*");
-                        shareIntent.putExtra(Intent.EXTRA_STREAM,
-                                Uri.parse(MediaStore.Images.Media.insertImage(
-                                        getContentResolver(), editablePhoto.getCurrentImage(), "temp", null)));
-                        startActivity(Intent.createChooser(shareIntent, "Share Photo"));
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Error sharing photo!", Toast.LENGTH_LONG).show();
-                    }
+                if (inCollageMode) {
+                    // share collage
 
+                } else {
+                    if (editablePhoto != null) {
+                        try {
+                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.setType("image/*");
+                            shareIntent.putExtra(Intent.EXTRA_STREAM,
+                                    Uri.parse(MediaStore.Images.Media.insertImage(
+                                            getContentResolver(), editablePhoto.getCurrentImage(), "temp", null)));
+                            startActivity(Intent.createChooser(shareIntent, "Share Photo"));
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Error sharing photo!", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
                 }
                 break;
             case R.id.gallery:
                 onOpenExistingPictureSelected();
                 break;
             case R.id.undo:
-                if (editablePhoto == null) return;
+                if (editablePhoto == null || inCollageMode) return;
                 if (!editablePhoto.undo()) {
                     Toast.makeText(this, "Nothing to undo!", Toast.LENGTH_SHORT).show();
                 }
@@ -220,7 +243,7 @@ public class OpenPictureActivity extends FragmentActivity
                 fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
                 break;
             case R.id.redo:
-                if (editablePhoto == null) return;
+                if (editablePhoto == null || inCollageMode) return;
                 if (!editablePhoto.redo()) {
                     Toast.makeText(this, "Nothing to redo!", Toast.LENGTH_SHORT).show();
                 }

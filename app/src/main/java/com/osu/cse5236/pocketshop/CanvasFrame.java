@@ -81,19 +81,8 @@ public class CanvasFrame extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 float x = event.getX();
                 float y = event.getY();
-
-                WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-                Display display = wm.getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                int screenWidth = size.x;
-                int screenHeight = size.y;
-                float scaledX = x/screenWidth;
-                float scaledY = y/screenHeight;
-
-                randomCollage.addImage(editablePhoto, scaledX, scaledY);
+                randomCollage.addImage(editablePhoto, x, y);
                 collageFrame.setImageBitmap(randomCollage.getCollage());
-                Log.e("coordinates", "Touched at " + x + " by " + y);
                 return true;
             }
         });

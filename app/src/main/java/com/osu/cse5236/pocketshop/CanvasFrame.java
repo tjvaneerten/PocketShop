@@ -1,15 +1,22 @@
 package com.osu.cse5236.pocketshop;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import com.osu.cse5236.framework.EditablePhoto;
 import com.osu.cse5236.framework.RandomCollage;
 
 /**
@@ -25,8 +32,10 @@ public class CanvasFrame extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    private EditablePhoto editablePhoto;
     private RandomCollage randomCollage;
 
     private OnCollageInteractionListener mListener;
@@ -39,10 +48,11 @@ public class CanvasFrame extends Fragment {
      * @return A new instance of fragment CanvasFrame.
      */
     // TODO: Rename and change types and number of parameters
-    public static CanvasFrame newInstance(RandomCollage param1) {
+    public static CanvasFrame newInstance(EditablePhoto param1, RandomCollage param2) {
         CanvasFrame fragment = new CanvasFrame();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, param1);
+        args.putSerializable(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,7 +64,8 @@ public class CanvasFrame extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            randomCollage = (RandomCollage)getArguments().getSerializable(ARG_PARAM1);
+            editablePhoto = (EditablePhoto)getArguments().getSerializable(ARG_PARAM1);
+            randomCollage = (RandomCollage)getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
@@ -63,23 +74,30 @@ public class CanvasFrame extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_canvas_frame, container, false);
+        final ImageView collageFrame = (ImageView)view.findViewById(R.id.collage_placeholder);
+        collageFrame.setImageBitmap(randomCollage.getCollage());
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 float x = event.getX();
                 float y = event.getY();
+
+                WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int screenWidth = size.x;
+                int screenHeight = size.y;
+                float scaledX = x/screenWidth;
+                float scaledY = y/screenHeight;
+
+                randomCollage.addImage(editablePhoto, scaledX, scaledY);
+                collageFrame.setImageBitmap(randomCollage.getCollage());
                 Log.e("coordinates", "Touched at " + x + " by " + y);
                 return true;
             }
         });
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onCollageInteraction(uri);
-        }
     }
 
     @Override
@@ -111,7 +129,7 @@ public class CanvasFrame extends Fragment {
      */
     public interface OnCollageInteractionListener {
         // TODO: Update argument type and name
-        public void onCollageInteraction(Uri uri);
+        public void onCollageInteraction(float x, float y);
     }
 
 }

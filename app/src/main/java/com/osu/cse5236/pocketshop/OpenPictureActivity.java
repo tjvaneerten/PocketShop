@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -150,8 +152,9 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.collage:
                 if (editablePhoto != null) {
+                    randomCollage = new RandomCollage(editablePhoto);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(randomCollage)).commit();
+                    fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(editablePhoto, randomCollage)).commit();
                 }
                 break;
             case R.id.crop:
@@ -274,7 +277,7 @@ public class OpenPictureActivity extends FragmentActivity
 
     @Override
     public void onEditablePictureInteraction(Uri uri) {
-        
+
     }
 
     @Override
@@ -311,7 +314,7 @@ public class OpenPictureActivity extends FragmentActivity
     }
 
     @Override
-    public void onCollageInteraction(Uri uri) {
+    public void onCollageInteraction(float x, float y) {
 
     }
 }

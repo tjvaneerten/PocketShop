@@ -93,7 +93,7 @@ public class EditablePhoto implements Serializable {
     }
 
     public void extractCroppedBitmap(Bundle extras) {
-        currentImage.setImage((Bitmap) extras.getParcelable("data"));
-        imageHistory.push(currentImage);
+        imageHistory.push(new SerialBitmap((Bitmap) extras.getParcelable("data")));
+        currentImage = imageHistory.peek();
     }
 }

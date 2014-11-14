@@ -189,9 +189,16 @@ public class OpenPictureActivity extends FragmentActivity
                 if (editablePhoto == null) return;
                 if (!editablePhoto.undo()) {
                     Toast.makeText(this, "Nothing to undo!", Toast.LENGTH_SHORT).show();
-                    return;
                 }
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
+                break;
+            case R.id.redo:
+                if (editablePhoto == null) return;
+                if (!editablePhoto.redo()) {
+                    Toast.makeText(this, "Nothing to redo!", Toast.LENGTH_SHORT).show();
+                }
+                fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
                 break;
         }

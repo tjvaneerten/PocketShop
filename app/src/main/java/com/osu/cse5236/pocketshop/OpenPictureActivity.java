@@ -35,6 +35,7 @@ public class OpenPictureActivity extends FragmentActivity
     private static final int SELECT_PICTURE = 1;
     private static final int TAKE_PICTURE = 2;
     public static final int CROP_PICTURE = 3;
+    private static final String EDITABLE_PHOTO = "EDITABLE_PHOTO";
     private EditablePhoto editablePhoto;
     private SensorManager sensorManager;
     private Sensor gyroSensor;
@@ -215,9 +216,18 @@ public class OpenPictureActivity extends FragmentActivity
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
-        Log.e("asd", "in onsaveinstancestat");
+        Log.e("asd", "in onSaveInstanceState");
+        if (editablePhoto != null) {
+            bundle.putSerializable(EDITABLE_PHOTO, editablePhoto);
+        }
         super.onSaveInstanceState(bundle);
-        //bundle.putSerializable(SAVED_STATE, );
+    }
+
+    @Override
+    protected  void onRestoreInstanceState(Bundle in) {
+        if (in != null) {
+            editablePhoto = (EditablePhoto)in.getSerializable(EDITABLE_PHOTO);
+        }
     }
 
     @Override

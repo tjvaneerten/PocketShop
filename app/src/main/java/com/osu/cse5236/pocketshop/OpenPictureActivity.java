@@ -28,8 +28,11 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class OpenPictureActivity extends FragmentActivity
-        implements View.OnClickListener, OpenExistingPicture.OnOpenExistingPictureListener,
-        PictureFrame.OnEditablePictureInteractionListener, Serializable, SensorEventListener{
+        implements View.OnClickListener,
+        OpenExistingPicture.OnOpenExistingPictureListener,
+        PictureFrame.OnEditablePictureInteractionListener,
+        CanvasFrame.OnCollageInteractionListener,
+        Serializable, SensorEventListener{
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
     private static final int SELECT_PICTURE = 1;
@@ -146,8 +149,10 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.collage:
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(randomCollage)).commit();
+                if (editablePhoto != null) {
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentPlaceholder, CanvasFrame.newInstance(randomCollage)).commit();
+                }
                 break;
             case R.id.crop:
                 if (editablePhoto != null) {
@@ -268,22 +273,17 @@ public class OpenPictureActivity extends FragmentActivity
     }
 
     @Override
+    public void onEditablePictureInteraction(Uri uri) {
+        
+    }
+
+    @Override
     public void onOpenExistingPictureSelected() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,
                 "Select Picture"), SELECT_PICTURE);
-    }
-
-    @Override
-    public void onEditablePictureInteraction(Uri uri) {
-        // TODO
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
@@ -307,6 +307,11 @@ public class OpenPictureActivity extends FragmentActivity
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+    @Override
+    public void onCollageInteraction(Uri uri) {
 
     }
 }

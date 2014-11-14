@@ -178,8 +178,17 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.share:
                 if (editablePhoto != null) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlaceholder, new FacebookLogin()).commit();
+                    try {
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("image/*");
+                        shareIntent.putExtra(Intent.EXTRA_STREAM,
+                                Uri.parse(MediaStore.Images.Media.insertImage(
+                                        getContentResolver(), editablePhoto.getCurrentImage(), "temp", null)));
+                        startActivity(Intent.createChooser(shareIntent, "Share Photo"));
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error sharing photo!", Toast.LENGTH_LONG).show();
+                    }
+
                 }
                 break;
             case R.id.gallery:

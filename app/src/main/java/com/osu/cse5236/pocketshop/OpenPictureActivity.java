@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -25,6 +26,8 @@ import android.support.v4.app.FragmentActivity;
 
 import com.osu.cse5236.framework.EditablePhoto;
 import com.osu.cse5236.framework.RandomCollage;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -344,5 +347,13 @@ public class OpenPictureActivity extends FragmentActivity
     @Override
     public void onCollageInteraction(float x, float y) {
 
+    }
+
+    private class CloseIntent extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            return null;
+        }
     }
 }

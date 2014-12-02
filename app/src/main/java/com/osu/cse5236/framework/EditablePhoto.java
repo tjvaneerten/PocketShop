@@ -69,7 +69,14 @@ public class EditablePhoto implements Serializable {
         String path = Environment.getExternalStorageDirectory().toString();
         String savedImageName = originalImageUri;
         String newImageName = savedImageName.replaceAll("/", "");
-        File savedImage = new File(path, newImageName+".png");
+        File savedImage = new File(path, "PocketShop"+newImageName.substring(8)+".png");
+        int count = 1;
+        while (savedImage.exists()) {
+            savedImage = new File(path, newImageName+count+".png");
+            if (savedImage.exists()) {
+                count++;
+            }
+        }
         try {
             out = new FileOutputStream(savedImage);
             currentImage.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);

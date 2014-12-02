@@ -67,7 +67,9 @@ public class EditablePhoto implements Serializable {
     public void saveImage() throws Exception {
         FileOutputStream out = null;
         String path = Environment.getExternalStorageDirectory().toString();
-        File savedImage = new File(path, "asdf.png");
+        String savedImageName = originalImageUri;
+        String newImageName = savedImageName.replaceAll("/", "");
+        File savedImage = new File(path, newImageName+".png");
         try {
             out = new FileOutputStream(savedImage);
             currentImage.getImage().compress(Bitmap.CompressFormat.PNG, 100, out);

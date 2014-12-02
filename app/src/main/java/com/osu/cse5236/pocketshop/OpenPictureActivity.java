@@ -50,30 +50,36 @@ public class OpenPictureActivity extends FragmentActivity
     private RandomCollage randomCollage;
     private long delay;
     private boolean inCollageMode;
+    public ImageView camera, collage, crop, rotate, save, share, gallery, undo, redo;
+    private boolean imageViewInitialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_picture);
-        ImageView camera = (ImageView)findViewById(R.id.camera);
-        ImageView collage = (ImageView)findViewById(R.id.collage);
-        ImageView crop = (ImageView)findViewById(R.id.crop);
-        ImageView rotate = (ImageView)findViewById(R.id.rotate);
-        ImageView save = (ImageView)findViewById(R.id.save);
-        ImageView share = (ImageView)findViewById(R.id.share);
-        ImageView gallery = (ImageView)findViewById(R.id.gallery);
-        ImageView undo = (ImageView)findViewById(R.id.undo);
-        ImageView redo = (ImageView)findViewById(R.id.redo);
 
-        camera.setOnClickListener(this);
-        collage.setOnClickListener(this);
-        crop.setOnClickListener(this);
-        rotate.setOnClickListener(this);
-        save.setOnClickListener(this);
-        share.setOnClickListener(this);
-        gallery.setOnClickListener(this);
-        undo.setOnClickListener(this);
-        redo.setOnClickListener(this);
+        if (!imageViewInitialized) {
+            camera = (ImageView) findViewById(R.id.camera);
+            collage = (ImageView) findViewById(R.id.collage);
+            crop = (ImageView) findViewById(R.id.crop);
+            rotate = (ImageView) findViewById(R.id.rotate);
+            save = (ImageView) findViewById(R.id.save);
+            share = (ImageView) findViewById(R.id.share);
+            gallery = (ImageView) findViewById(R.id.gallery);
+            undo = (ImageView) findViewById(R.id.undo);
+            redo = (ImageView) findViewById(R.id.redo);
+            imageViewInitialized = true;
+
+            camera.setOnClickListener(this);
+            collage.setOnClickListener(this);
+            crop.setOnClickListener(this);
+            rotate.setOnClickListener(this);
+            save.setOnClickListener(this);
+            share.setOnClickListener(this);
+            gallery.setOnClickListener(this);
+            undo.setOnClickListener(this);
+            redo.setOnClickListener(this);
+        }
 
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getFragmentManager();
@@ -142,12 +148,15 @@ public class OpenPictureActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public Intent captureIntent = null;
+    public FragmentTransaction fragmentTransaction = null;
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.camera:
                 try {
                     //use standard intent to capture an image
-                    Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     //we will handle the returned data in onActivityResult
                     startActivityForResult(captureIntent, TAKE_PICTURE);
                 } catch(ActivityNotFoundException ex){
@@ -158,7 +167,7 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.collage:
                 if (inCollageMode) {
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction = getFragmentManager().beginTransaction();
                     OpenExistingPicture pictureFrame = new OpenExistingPicture();
                     fragmentTransaction.replace(R.id.fragmentPlaceholder, pictureFrame).commit();
                     inCollageMode = false;

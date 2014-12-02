@@ -299,10 +299,8 @@ public class OpenPictureActivity extends FragmentActivity
                 editablePhoto.extractCroppedBitmap(data.getExtras());
             }
             FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto));
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            LoadPictureAsync asyncTask = new LoadPictureAsync();
+            asyncTask.execute(fragmentManager);
         }
     }
 
@@ -349,10 +347,14 @@ public class OpenPictureActivity extends FragmentActivity
 
     }
 
-    private class CloseIntent extends AsyncTask {
+    private class LoadPictureAsync extends AsyncTask<FragmentManager, Void, Void> {
 
         @Override
-        protected Object doInBackground(Object[] params) {
+        protected Void doInBackground(FragmentManager... fragmentManagers) {
+            FragmentTransaction fragmentTransaction = fragmentManagers[0].beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto));
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
             return null;
         }
     }

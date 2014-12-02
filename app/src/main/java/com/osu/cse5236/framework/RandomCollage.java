@@ -31,7 +31,7 @@ public class RandomCollage implements Serializable {
     public Bitmap getCollage() {
         return collage.getImage();
     }
-
+    //on tap, currently selected image added to the collage at the given locations
     public void addImage(EditablePhoto editablePhoto, float x, float y) {
         float marginX = (screenWidth - canvasWidth) / 2;
         float marginY = (screenHeight - canvasHeight) / 2;
@@ -43,7 +43,7 @@ public class RandomCollage implements Serializable {
                 y - marginY,
                 null);
     }
-
+    //serializable function
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeObject(collage);
         out.writeObject(screenHeight);

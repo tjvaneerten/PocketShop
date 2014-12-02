@@ -32,6 +32,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * Main activity class, opens the app!
+ */
 public class OpenPictureActivity extends FragmentActivity
         implements View.OnClickListener,
         OpenExistingPicture.OnOpenExistingPictureListener,
@@ -40,6 +43,7 @@ public class OpenPictureActivity extends FragmentActivity
         Serializable, SensorEventListener{
 
     private final String TAG = ((Object)this).getClass().getSimpleName();
+    //global variables for onclick situations
     private static final int SELECT_PICTURE = 1;
     private static final int TAKE_PICTURE = 2;
     public static final int CROP_PICTURE = 3;
@@ -50,6 +54,7 @@ public class OpenPictureActivity extends FragmentActivity
     private RandomCollage randomCollage;
     private long delay;
     private boolean inCollageMode;
+    //imageviews for onclick items
     public ImageView camera, collage, crop, rotate, save, share, gallery, undo, redo;
     private boolean imageViewInitialized = false;
 
@@ -57,7 +62,7 @@ public class OpenPictureActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_picture);
-
+        //save time for reinitialization
         if (!imageViewInitialized) {
             camera = (ImageView) findViewById(R.id.camera);
             collage = (ImageView) findViewById(R.id.collage);
@@ -69,7 +74,7 @@ public class OpenPictureActivity extends FragmentActivity
             undo = (ImageView) findViewById(R.id.undo);
             redo = (ImageView) findViewById(R.id.redo);
             imageViewInitialized = true;
-
+            //set imageviews to listen for user inputs
             camera.setOnClickListener(this);
             collage.setOnClickListener(this);
             crop.setOnClickListener(this);
@@ -80,18 +85,18 @@ public class OpenPictureActivity extends FragmentActivity
             undo.setOnClickListener(this);
             redo.setOnClickListener(this);
         }
-
+        //set up initial screen
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             OpenExistingPicture pictureFrame = new OpenExistingPicture();
             fragmentTransaction.add(R.id.fragmentPlaceholder, pictureFrame).commit();
         }
-
+        //setup the sensors
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         delay = 0;
-
+        //starts not in collage mode
         inCollageMode = false;
 
         Log.e(TAG, "++ In onCreate() ++");
@@ -150,7 +155,7 @@ public class OpenPictureActivity extends FragmentActivity
 
     public Intent captureIntent = null;
     public FragmentTransaction fragmentTransaction = null;
-
+    //onclick activity switch, performs actions based on user input locations
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.camera:
@@ -167,13 +172,16 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
             case R.id.collage:
                 if (inCollageMode) {
+                    //changes back from collage mode to initial screen
                     fragmentTransaction = getFragmentManager().beginTransaction();
                     OpenExistingPicture pictureFrame = new OpenExistingPicture();
                     fragmentTransaction.replace(R.id.fragmentPlaceholder, pictureFrame).commit();
                     inCollageMode = false;
                 } else {
+                    //changes from current state to collage mode state
                     if (editablePhoto != null) {
                         inCollageMode = true;
+                        //collage setup
                         if (randomCollage == null) {
                             Display display = getWindowManager().getDefaultDisplay();
                             Point size = new Point();
@@ -188,6 +196,7 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.crop:
+                //does nothing if not in collage mode
                 if ((editablePhoto != null) && !inCollageMode) {
                     Intent cropIntent = new Intent("com.android.camera.action.CROP");
                     cropIntent.setDataAndType(editablePhoto.getOriginalImageUri(), "image/*");
@@ -200,6 +209,7 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.rotate:
+                //does nothing if not in collage mode, then refreshes initial page wiht a rotated image
                 if ((editablePhoto != null) && !inCollageMode) {
                     editablePhoto.rotateImage(true);
                     FragmentManager fragmentManager = getFragmentManager();
@@ -208,44 +218,38 @@ public class OpenPictureActivity extends FragmentActivity
                 }
                 break;
             case R.id.save:
-                if (inCollageMode) {
-                    // save collage
-
-                } else {
-                    if (editablePhoto != null) {
-                        try {
-                            editablePhoto.saveImage();
-                            Toast.makeText(this, "Image saved successfully!", Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Image was not saved successfully", Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
+                //doesn't save if no picture is selected
+                if (editablePhoto != null) {
+                    try {
+                        editablePhoto.saveImage();
+                        Toast.makeText(this, "Image saved successfully!", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Image was not saved successfully", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
                 }
                 break;
             case R.id.share:
-                if (inCollageMode) {
-                    // share collage
-
-                } else {
-                    if (editablePhoto != null) {
-                        try {
-                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                            shareIntent.setType("image/*");
-                            shareIntent.putExtra(Intent.EXTRA_STREAM,
-                                    Uri.parse(MediaStore.Images.Media.insertImage(
-                                            getContentResolver(), editablePhoto.getCurrentImage(), "temp", null)));
-                            startActivity(Intent.createChooser(shareIntent, "Share Photo"));
-                        } catch (Exception e) {
-                            Toast.makeText(this, "Error sharing photo!", Toast.LENGTH_LONG).show();
-                        }
-
+                //cannot share a non-existent photo
+                if (editablePhoto != null) {
+                    try {
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("image/*");
+                        shareIntent.putExtra(Intent.EXTRA_STREAM,
+                                Uri.parse(MediaStore.Images.Media.insertImage(
+                                        getContentResolver(), editablePhoto.getCurrentImage(), "temp", null)));
+                        startActivity(Intent.createChooser(shareIntent, "Share Photo"));
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Error sharing photo!", Toast.LENGTH_LONG).show();
                     }
+
                 }
                 break;
+                //take picture from gallery
             case R.id.gallery:
                 onOpenExistingPictureSelected();
                 break;
+                //undoes most recent change, toast alert if no changes to be undone
             case R.id.undo:
                 if (editablePhoto == null || inCollageMode) return;
                 if (!editablePhoto.undo()) {
@@ -254,6 +258,7 @@ public class OpenPictureActivity extends FragmentActivity
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlaceholder, PictureFrame.newInstance(editablePhoto)).commit();
                 break;
+                //redoes the most recently undone change, toast alert if no undone changes to be redone
             case R.id.redo:
                 if (editablePhoto == null || inCollageMode) return;
                 if (!editablePhoto.redo()) {
@@ -264,7 +269,7 @@ public class OpenPictureActivity extends FragmentActivity
                 break;
         }
     }
-
+    //saves the most recent state for retrieval later
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         Log.e("asd", "in onSaveInstanceState");
@@ -274,13 +279,14 @@ public class OpenPictureActivity extends FragmentActivity
         super.onSaveInstanceState(bundle);
     }
 
+    //allows user to leave application and reopen to their most recent screen
     @Override
     protected  void onRestoreInstanceState(Bundle in) {
         if (in != null) {
             editablePhoto = (EditablePhoto)in.getSerializable(EDITABLE_PHOTO);
         }
     }
-
+    //flow of actions based on user entries
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -317,7 +323,7 @@ public class OpenPictureActivity extends FragmentActivity
     public void onEditablePictureInteraction(Uri uri) {
 
     }
-
+    //retrieves an existing picture
     @Override
     public void onOpenExistingPictureSelected() {
         Intent intent = new Intent();
@@ -326,7 +332,7 @@ public class OpenPictureActivity extends FragmentActivity
         startActivityForResult(Intent.createChooser(intent,
                 "Select Picture"), SELECT_PICTURE);
     }
-
+    //monitors and delays rotational activity and rotates the picture accordingly
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (editablePhoto == null) return;
@@ -355,7 +361,7 @@ public class OpenPictureActivity extends FragmentActivity
     public void onCollageInteraction(float x, float y) {
 
     }
-
+    //hastens the switching of the fragments, intents, and applications
     private class LoadPictureAsync extends AsyncTask<FragmentManager, Void, Void> {
 
         @Override

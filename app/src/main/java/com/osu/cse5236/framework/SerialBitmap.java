@@ -11,6 +11,8 @@ import java.io.Serializable;
 
 /**
  * Created by TJ on 11/13/2014.
+ *
+ * allows bitmaps to be serialized
  */
 public class SerialBitmap implements Serializable {
 

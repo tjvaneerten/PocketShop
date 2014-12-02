@@ -41,7 +41,7 @@ public class EditablePhoto implements Serializable {
     public Bitmap getCurrentImage() {
         return currentImage.getImage();
     }
-
+    //undoes the most recent change
     public boolean undo() {
         if (imageHistory.size() > 1) {
             imageRedos.push(imageHistory.pop());
@@ -51,7 +51,7 @@ public class EditablePhoto implements Serializable {
             return false;
         }
     }
-
+    //redoes the most recently undone change
     public boolean redo() {
         if (imageRedos.size() > 0) {
             imageHistory.push(imageRedos.pop());
@@ -64,13 +64,17 @@ public class EditablePhoto implements Serializable {
 
     public Uri getOriginalImageUri() { return Uri.parse(originalImageUri); }
 
+    //saves the current image
     public void saveImage() throws Exception {
         FileOutputStream out = null;
+        //get file path
         String path = Environment.getExternalStorageDirectory().toString();
         String savedImageName = originalImageUri;
         String newImageName = savedImageName.replaceAll("/", "");
+        //initialize the final
         File savedImage = new File(path, "PocketShop"+newImageName.substring(8)+".png");
         int count = 1;
+        //no overwriting an already saved file!
         while (savedImage.exists()) {
             savedImage = new File(path, newImageName+count+".png");
             if (savedImage.exists()) {
@@ -93,7 +97,7 @@ public class EditablePhoto implements Serializable {
             }
         }
     }
-
+    //rotates the image
     public void rotateImage(boolean direction) {
         Matrix matrix = new Matrix();
         matrix.postRotate(direction ? 90 : -90);
@@ -101,7 +105,7 @@ public class EditablePhoto implements Serializable {
         imageHistory.push(new SerialBitmap(rotatedImage));
         currentImage = imageHistory.peek();
     }
-
+    //gets cropped bitmap from crop intent
     public void extractCroppedBitmap(Bundle extras) {
         imageHistory.push(new SerialBitmap((Bitmap) extras.getParcelable("data")));
         currentImage = imageHistory.peek();
